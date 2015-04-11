@@ -132,7 +132,7 @@ function validate(schema, data) {
       var message = (typeof error === 'object') && (error.property + " " + error.message) || error;
       _errors.push(message);
     });
-  // TODO: JSON Schema can generate dup warning messages for enums.  For now, suppressing here.
+  // JSON Schema can generate dup warning messages for enums.  For now, suppressing here.
   return _.uniq(_errors);
 }
 

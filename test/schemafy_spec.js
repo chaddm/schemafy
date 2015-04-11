@@ -1,34 +1,28 @@
 var _ = require('lodash');
 var expect = require('chai').expect;
-var Schemafy;
+var Schemafy = require('../src/schemafy');
+
+var groupSchema;
 var Group;
 var group;
+var ExtendedSchema;
 
 function propertiesOnly(json) {
   return _.merge({}, json);
 }
 
-describe('lib/schema', function () {
+describe('Creating new schemas', function () {
 
   beforeEach(function () {
-    Schemafy = undefined;
+    groupSchema = undefined;
     Group = undefined;
     group = undefined;
-
-    Schemafy = require('../src/schemafy');
+    ExtendedSchema = undefined;
   });
 
-  it('is defined', function () {
-    expect(Schemafy).to.exist;
-  });
-
-  it('is a function', function () {
-    expect(Schemafy).to.be.a('function');
-  });
-
-  describe('when called to create a Group schema', function () {
-    beforeEach(function () {
-      Group = new Schemafy({
+  describe('Given the Group schema', function(){
+    beforeEach(function() {
+      groupSchema = {
         "type": "object",
         "id": "group",
         "required": true,
@@ -40,74 +34,92 @@ describe('lib/schema', function () {
             "required": true
           }
         }
-      });
+      };
     });
 
-    describe('Group schema', function () {
-      it('has properties created with Schemafy', function () {
-        expect(Group.schema()).to.deep.equal({
-          "type": "object",
-          "id": "group",
-          "required": true,
-          "additionalProperties": false,
-          "properties": {
-            "id": {
-              "description": "Universally unique identifier",
-              "type": "string",
-              "required": true
-            }
-          }
-        });
+    describe('when Schemafy creates Group schema', function () {
+      beforeEach(function () {
+        Group = new Schemafy(groupSchema);
       });
 
-      describe('when Group is used to instantiate a new group', function () {
-        beforeEach(function () {
-          group = new Group();
+      describe('Group#schema', function () {
+        it('is defined', function(){
+          expect(Group.schema).to.exist;
         });
 
-        it('returns instance of Group', function () {
-          expect(group).to.be.instanceof(Group);
+        it('is is a function', function(){
+          expect(Group.schema).to.be.a('function');
         });
 
-        describe('group instance', function () {
-          it('has default properties from Group schema', function () {
-            expect(_.merge({}, group)).to.deep.equal({
-              id: ''
+        it('returns original schema when called', function () {
+          expect(Group.schema()).to.deep.equal({
+            "type": "object",
+            "id": "group",
+            "required": true,
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "description": "Universally unique identifier",
+                "type": "string",
+                "required": true
+              }
+            }
+          });
+        });
+
+      }); // Group#schema
+
+      describe('Group#extend', function () {
+        it('is defined', function(){
+          expect(Group.extend).to.exist;
+        });
+
+        it('is is a function', function(){
+          expect(Group.extend).to.be.a('function');
+        });
+
+        describe('when called with additional properties', function(){
+          beforeEach(function(){
+            ExtendedSchema = Group.extend({
+              "properties": {
+                "foo": {
+                  "type": "string"
+                }
+              }
             });
           });
-          it('returns errors with __validate', function () {
-            expect(group.__validate()).to.deep.equal([]);
-          });
-          it('returns string for __toJson', function () {
-            expect(group.__toJson()).to.equal("{\"id\":\"\"}");
-          });
-        });
-      });
 
-      describe('when Group is used to instantiate a blank group', function () {
-        beforeEach(function () {
-          group = new Group(false);
+          it('returns a new Schemafy constructor', function(){
+            expect(Group.extend('ExtendedSchema', ExtendedSchema)).to.be.a('function');
+          });
+
+          describe('ExtendedSchema#schema', function(){
+            it('returns new full extended schema', function(){
+              expect(ExtendedSchema.schema()).to.deep.equal({
+                "type": "object",
+                "id": "group",
+                "required": true,
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "description": "Universally unique identifier",
+                    "type": "string",
+                    "required": true
+                  },
+                  "foo": {
+                    "type": "string"
+                  }
+                }
+              });
+            });
+          }); // Extendedschema#schema
+
         });
 
-        it('returns instance of Group', function () {
-          expect(group).to.be.instanceof(Group);
-        });
+      }); // Group#extend
 
-        describe('group instance', function () {
-          it('has default properties from Group schema', function () {
-            expect(propertiesOnly(group)).to.deep.equal({});
-          });
-          it('returns errors with __validate', function () {
-            expect(group.__validate()).to.deep.equal([
-              "instance.id is required"
-            ]);
-          });
-          it('returns string for __toJson', function () {
-            expect(group.__toJson()).to.equal("{}");
-          });
-        });
-      });
-    });
-  });
+    }); // when Schemafy creates Group schema
+
+  }); // Given the Group schema
 
 });
