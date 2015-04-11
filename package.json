@@ -1,0 +1,37 @@
+{
+  "name": "schemafy",
+  "version": "1.0.0",
+  "description": "JSON schema generation and validation.",
+  "main": "src/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "crypto": "0.0.3",
+    "jsonschema": "^1.0.1",
+    "lodash": "^3.6.0"
+  },
+  "devDependencies": {
+    "chai": "^2.2.0",
+    "gulp": "^3.8.11",
+    "mocha": "^2.2.4"
+  },
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chaddm/schemafy.git"
+  },
+  "keywords": [
+    "JSON",
+    "schema",
+    "validator"
+  ],
+  "author": "Chad Dumler-Montplaisir",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chaddm/schemafy/issues"
+  },
+  "homepage": "https://github.com/chaddm/schemafy"
+}
