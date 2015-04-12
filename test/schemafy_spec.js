@@ -7,6 +7,7 @@ var Group;
 var group;
 var ExtendedSchema;
 var errors;
+var lambda;
 
 function propertiesOnly(json) {
   return _.merge({}, json);
@@ -20,6 +21,7 @@ describe('Creating new schemas', function () {
     group = undefined;
     ExtendedSchema = undefined;
     errors = [];
+    lambda = undefined;
   });
 
   describe('Given the Group schema', function(){
@@ -141,6 +143,43 @@ describe('Creating new schemas', function () {
           });
 
 
+        });
+
+      }); // Group#extend
+
+      describe('Group#addValidation', function () {
+        it('is defined', function(){
+          expect(Group.addValidation).to.exist;
+        });
+
+        it('is is a function', function(){
+          expect(Group.addValidation).to.be.a('function');
+        });
+
+        describe('when called with something not a function', function(){
+          beforeEach(function(){
+            lambda = function () {
+              Group.addValidation("boom!");
+            };
+          });
+
+          it('throws error', function(){
+            expect(lambda).to.throw("Validators must be a function.");
+          });
+        });
+
+        describe('when called with a function', function(){
+          beforeEach(function(){
+            lambda = function () {
+              Group.addValidation(function(){
+
+              });
+            };
+          });
+
+          it('does not throw an error', function(){
+            expect(lambda).to.not.throw();
+          });
         });
 
       }); // Group#extend
