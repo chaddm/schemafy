@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var _ = require('lodash');
 var crypto = require('crypto');
@@ -165,7 +165,7 @@ function SchemaGenerator() {
   __Schema.extend = function extend(name, extension) {
     return SchemaGenerator(name, _.merge({}, definition, extension, overwriteArrays ));
   };
-  __Schema.validate = function validate(json) {
+  __Schema.validate = function validate_(json) {
     return validate(definition, _.assign({}, json));
   };
   __Schema.prototype.__validate = function __validate() {

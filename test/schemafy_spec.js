@@ -6,6 +6,7 @@ var groupSchema;
 var Group;
 var group;
 var ExtendedSchema;
+var errors;
 
 function propertiesOnly(json) {
   return _.merge({}, json);
@@ -18,6 +19,7 @@ describe('Creating new schemas', function () {
     Group = undefined;
     group = undefined;
     ExtendedSchema = undefined;
+    errors = [];
   });
 
   describe('Given the Group schema', function(){
@@ -113,6 +115,31 @@ describe('Creating new schemas', function () {
               });
             });
           }); // Extendedschema#schema
+
+        });
+
+      }); // Group#extend
+
+      describe('Group#validate', function () {
+        it('is defined', function(){
+          expect(Group.validate).to.exist;
+        });
+
+        it('is is a function', function(){
+          expect(Group.validate).to.be.a('function');
+        });
+
+        describe('when called with an invalid JSON', function(){
+          beforeEach(function(){
+            errors = Group.validate({});
+          });
+
+          it('returns a list of errors', function(){
+            expect(errors).to.deep.equal([
+              'instance.id is required'
+            ]);
+          });
+
 
         });
 
