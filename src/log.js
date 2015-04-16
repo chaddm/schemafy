@@ -13,4 +13,4 @@ module.exports = {
       console.log(arguments);
     }
   }
-}
+};
