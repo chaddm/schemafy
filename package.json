@@ -34,6 +34,10 @@
     "validator"
   ],
   "author": "Chad Dumler-Montplaisir",
+  "contributors": [{
+    "name": "Eric Biven",
+    "email": "eric@biven.us"
+  }],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/chaddm/schemafy/issues"
