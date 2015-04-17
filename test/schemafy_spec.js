@@ -8,6 +8,7 @@ var group;
 var ExtendedSchema;
 var errors;
 var lambda;
+var data;
 
 function propertiesOnly(json) {
   return _.merge({}, json);
@@ -22,6 +23,7 @@ describe('Creating new schemas', function () {
     ExtendedSchema = undefined;
     errors = [];
     lambda = undefined;
+    data = undefined;
   });
 
   describe('Given the Group schema', function(){
@@ -141,44 +143,58 @@ describe('Creating new schemas', function () {
               'instance.id is required'
             ]);
           });
-
-
         });
 
       }); // Group#extend
 
-      describe('Group#addValidation', function () {
+      describe('Group#extendValiation', function () {
         it('is defined', function(){
-          expect(Group.addValidation).to.exist;
+          expect(Group.extendValidation).to.exist;
         });
 
         it('is is a function', function(){
-          expect(Group.addValidation).to.be.a('function');
+          expect(Group.extendValidation).to.be.a('function');
         });
 
         describe('when called with something not a function', function(){
           beforeEach(function(){
             lambda = function () {
-              Group.addValidation("boom!");
+              Group.extendValidation("boom!");
             };
           });
 
           it('throws error', function(){
-            expect(lambda).to.throw("Validators must be a function.");
+            expect(lambda).to.throw("Extended validation must be a function.");
           });
         });
 
         describe('when called with a function', function(){
           beforeEach(function(){
             lambda = function () {
-              Group.addValidation(function(){
-
+              Group.extendValidation(function(){
+                return ["Expected '" + this.id + "' to be 'bar'.", "Say hi!"]
               });
             };
           });
 
           it('does not throw an error', function(){
             expect(lambda).to.not.throw();
+          });
+
+          describe('given a valid object that fails the extended validator', function(){
+            beforeEach(function(){
+              data = {
+                id: "Blah blah blah"
+              };
+            });
+
+            it('returns the extended validator errors', function(){
+              expect(Group.validate(data)).to.deep.equal([
+                "Expected 'Blah blah blah' to be 'bar'.",
+                "Say hi!"
+              ]);
+            });
+
           });
         });
 

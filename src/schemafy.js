@@ -154,7 +154,7 @@ function SchemaGenerator() {
     "additionalProperties": false,
     "properties": {}
   });
-  var validators = [];
+  var extendedValidator;
 
   var __Schema = {};
   /* jshint evil:true */
@@ -169,13 +169,12 @@ function SchemaGenerator() {
   __Schema.validate = function validate_(json) {
     return validate(definition, _.assign({}, json));
   };
-  __Schema.addValidation = function addValidation(fn) {
+  __Schema.extendValidation = function addValidation(fn) {
     if(typeof fn !== 'function') {
-      throw new Error('Validators must be a function.');
+      throw new Error('Extended validation must be a function.');
       return;
     }
-      validators.push(fn);
-
+    extendedValidator = fn;
   };
   __Schema.prototype.__validate = function __validate() {
     return validate(definition, _.assign({}, this));
