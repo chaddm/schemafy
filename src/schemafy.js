@@ -142,7 +142,7 @@ function overwriteArrays(destination, source) {
 
 function SchemaGenerator() {
   var args = [].slice.call(arguments, 0).concat({});
-  var schemaName = 'Schema';
+  var schemaName = 'SchemafySchema';
   if (typeof args[0] === 'string') {
     schemaName = args[0];
     args.shift();

@@ -8,7 +8,7 @@ function propertiesOnly(json) {
   return _.merge({}, json);
 }
 
-describe('lib/schema', function () {
+describe('Schemafy', function () {
 
   beforeEach(function () {
     Schemafy = undefined;
