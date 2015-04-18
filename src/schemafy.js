@@ -166,7 +166,25 @@ function SchemaGenerator() {
     return SchemaGenerator(name, _.merge({}, definition, extension, overwriteArrays ));
   };
   __Schema.validate = function validate(json) {
-    return validate(definition, _.assign({}, json));
+    var valid = false;
+    if (this.hooks && this.hooks.preValidate) {
+      log.debug('preValidate called');
+      this.hooks.preValidate(definition, _.assign({}, json), function(retVal) {
+        if (retVal === false) { valid = false; return; }
+        valid = validate(definition, _.assign({}, json));
+        if (this.hooks && this.hooks.postValidate) {
+          log.debug('postValidate called');
+          this.hooks.postValidate(definition, _.assign({}, json), valid, function(retVal) {
+            valid = retVal;
+          });
+        }
+        return valid;
+      });
+    }
+  };
+  __Schema.registerHook = function registerHook(event, f) {
+    if (!this.hooks) { this.hooks = {}; }
+    this.hooks[event] = f;
   };
   __Schema.prototype.__validate = function __validate() {
     return validate(definition, _.assign({}, this));
