@@ -11,7 +11,7 @@
   "eqeqeq": true, // true: Require triple equals (===) for comparison
   "forin": true, // true: Require filtering for..in loops with obj.hasOwnProperty()
   "immed": false, // true: Require immediate invocations to be wrapped in parens e.g. `(function () { } ());`
-  "indent": 4, // {int} Number of spaces to use for indentation
+  "indent": 2, // {int} Number of spaces to use for indentation
   "latedef": false, // true: Require variables/functions to be defined before being used
   "newcap": false, // true: Require capitalization of all constructor functions e.g. `new F()`
   "noarg": true, // true: Prohibit use of `arguments.caller` and `arguments.callee`
@@ -41,7 +41,7 @@
   "es5": false, // true: Allow ES5 syntax (ex: getters and setters)
   "esnext": false, // true: Allow ES.next (ES6) syntax (ex: `const`)
   "moz": false, // true: Allow Mozilla specific syntax (extends and overrides esnext features)
-  // (ex: `for each`, multiple try/catch, function expressionâ€¦)
+  // (ex: `for each`, multiple try/catch, function expression…)
   "evil": false, // true: Tolerate use of `eval` and `new Function()`
   "expr": true, // true: Tolerate `ExpressionStatement` as Programs
   "funcscope": false, // true: Tolerate defining variables inside control statements"
@@ -77,27 +77,27 @@
 
   // Legacy
   "nomen": false, // true: Prohibit dangling `_` in variables
-  "onevar": false, // true: Allow only one `var` statement per function
+  "onevar": true, // true: Allow only one `var` statement per function
   "passfail": false, // true: Stop on first error
-  "white": false, // true: Check against strict whitespace and indentation rules
+  "white": true, // true: Check against strict whitespace and indentation rules
 
   "globals": {
-      // Automatically expected globals for testing.
-      // Do not add globals for source code.  Add globals to top of source file.
-      "define": true,
-      "require": true,
-      "_": true,
-      "$": true,
-      "describe": true,
-      "expect": true,
-      "it": true,
-      "before": true,
-      "beforeEach": true,
-      "after": true,
-      "afterEach": true,
-      "spyOn": true,
-      "runs": true,
-      "waits": true,
-      "waitsFor": true
+    // Automatically expected globals for testing.
+    // Do not add globals for source code.  Add globals to top of source file.
+    "define": true,
+    "require": true,
+    "_": true,
+    "$": true,
+    "describe": true,
+    "it": true,
+    "before": true,
+    "beforeEach": true,
+    "after": true,
+    "afterEach": true,
+    "spyOn": true,
+    "runs": true,
+    "waits": true,
+    "waitsFor": true
   }
+
 }
