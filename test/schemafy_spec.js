@@ -35,10 +35,19 @@ describe('Schemafy', function() {
         "additionalProperties": false,
         "properties": {
           "id": {
-            "description": "Universally unique identifier",
             "type": "string",
             "required": true,
             "default": "12345"
+          },
+          "value": {
+            "type": "number",
+            "required": true,
+            "default": 43445
+          },
+          "isTrue": {
+            "type": "boolean",
+            "required": true,
+            "default": false
           }
         }
       });
@@ -53,10 +62,19 @@ describe('Schemafy', function() {
           "additionalProperties": false,
           "properties": {
             "id": {
-              "description": "Universally unique identifier",
               "type": "string",
               "required": true,
               "default": "12345"
+            },
+            "value": {
+              "type": "number",
+              "required": true,
+              "default": 43445
+            },
+            "isTrue": {
+              "type": "boolean",
+              "required": true,
+              "default": false
             }
           }
         });
@@ -74,14 +92,16 @@ describe('Schemafy', function() {
         describe('group instance', function() {
           it('has required properties from Group schema', function() {
             expect(_.merge({}, group)).to.deep.equal({
-              id: '12345'
+              id: '12345',
+              value: 43445,
+              isTrue: false
             });
           });
           it('returns no errors with __validate', function() {
             expect(group.__validate()).to.deep.equal([]);
           });
           it('returns string for __toJson', function() {
-            expect(group.__toJson()).to.equal("{\"id\":\"12345\"}");
+            expect(group.__toJson()).to.equal("{\"id\":\"12345\",\"value\":43445,\"isTrue\":false}");
           });
         });
       });
@@ -100,14 +120,16 @@ describe('Schemafy', function() {
         describe('group instance', function() {
           it('has required properties from Group schema', function() {
             expect(_.merge({}, group)).to.deep.equal({
-              id: '31415'
+              id: '31415',
+              value: 43445,
+              isTrue: false
             });
           });
           it('returns no errors with __validate', function() {
             expect(group.__validate()).to.deep.equal([]);
           });
           it('returns string for __toJson', function() {
-            expect(group.__toJson()).to.equal("{\"id\":\"31415\"}");
+            expect(group.__toJson()).to.equal("{\"id\":\"31415\",\"value\":43445,\"isTrue\":false}");
           });
         });
       });
@@ -126,75 +148,175 @@ describe('Schemafy', function() {
         describe('group instance', function() {
           it('has properties only from Group schema', function() {
             expect(_.merge({}, group)).to.deep.equal({
-              id: '12345'
+              id: '12345',
+              value: 43445,
+              isTrue: false
             });
           });
           it('returns no errors with __validate', function() {
             expect(group.__validate()).to.deep.equal([]);
           });
           it('returns string for __toJson', function() {
-            expect(group.__toJson()).to.equal("{\"id\":\"12345\"}");
-          });
-        });
-      });
-
-      describe('when Group is created without coercion', function() {
-        beforeEach(function() {
-          group = new Group({
-            id: 31415
-          });
-        });
-
-        it('returns instance of Group', function() {
-          expect(group).to.be.instanceof(Group);
-        });
-
-        describe('group instance', function() {
-          it('has properties only from Group schema', function() {
-            expect(_.merge({}, group)).to.deep.equal({
-              id: 31415
-            });
-          });
-          it('returns no errors with __validate', function() {
-            expect(group.__validate()).to.deep.equal([
-              'instance.id is not of a type(s) string'
-            ]);
-          });
-          it('returns string for __toJson', function() {
-            expect(group.__toJson()).to.equal("{\"id\":31415}");
-          });
-        });
-      });
-
-      describe('when Group is created with coercion', function() {
-        beforeEach(function() {
-          group = new Group({
-            id: 31415
-          }, {
-            coerce: true
-          });
-        });
-
-        it('returns instance of Group', function() {
-          expect(group).to.be.instanceof(Group);
-        });
-
-        describe('group instance', function() {
-          it('has properties only from Group schema', function() {
-            expect(_.merge({}, group)).to.deep.equal({
-              id: "31415"
-            });
-          });
-          it('returns no errors with __validate', function() {
-            expect(group.__validate()).to.deep.equal([]);
-          });
-          it('returns string for __toJson', function() {
-            expect(group.__toJson()).to.equal("{\"id\":\"31415\"}");
+            expect(group.__toJson()).to.equal("{\"id\":\"12345\",\"value\":43445,\"isTrue\":false}");
           });
         });
       });
 
     });
+  });
+
+  describe('instance creation options', function() {
+    describe('coercion', function() {
+
+      describe('given a Group with a string', function() {
+        beforeEach(function() {
+          Group = new Schemafy({
+            "type": "object",
+            "id": "group",
+            "required": true,
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "required": true,
+                "default": "12345"
+              }
+            }
+          });
+        });
+
+        describe('given a group created without coercion', function() {
+          beforeEach(function() {
+            group = new Group({
+              id: 31415
+            }, {
+              coerce: false
+            });
+          });
+
+          describe('group instance', function() {
+            it('has original value from initializer', function() {
+              expect(_.merge({}, group)).to.deep.equal({
+                id: 31415,
+              });
+            });
+            it('returns string error with __validate', function() {
+              expect(group.__validate()).to.deep.equal([
+                'instance.id is not of a type(s) string'
+              ]);
+            });
+          });
+        });
+
+        describe('given a group created with coercion', function() {
+          beforeEach(function() {
+            group = new Group({
+              id: "31415"
+            }, {
+              coerce: true
+            });
+          });
+
+          describe('group instance', function() {
+            it('has coerced value from initializer', function() {
+              expect(_.merge({}, group)).to.deep.equal({
+                id: "31415"
+              });
+            });
+            it('returns no with __validate', function() {
+              expect(group.__validate()).to.deep.equal([]);
+            });
+          });
+        });
+
+      }); // Test string
+
+      describe('given a Group with a number', function() {
+        beforeEach(function() {
+          Group = new Schemafy({
+            "type": "object",
+            "id": "group",
+            "required": true,
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "number",
+                "required": true,
+                "default": 12345
+              }
+            }
+          });
+        });
+
+        describe('given a group created without coercion', function() {
+          beforeEach(function() {
+            group = new Group({
+              id: "31415"
+            }, {
+              coerce: false
+            });
+          });
+
+          describe('group instance', function() {
+            it('has original value from initializer', function() {
+              expect(_.merge({}, group)).to.deep.equal({
+                id: "31415",
+              });
+            });
+            it('returns number error with __validate', function() {
+              expect(group.__validate()).to.deep.equal([
+                'instance.id is not of a type(s) number'
+              ]);
+            });
+          });
+        });
+
+        describe('given a group with a string is created with coercion', function() {
+          beforeEach(function() {
+            group = new Group({
+              id: "31415"
+            }, {
+              coerce: true
+            });
+          });
+
+          describe('group instance', function() {
+            it('has coerced value from initializer', function() {
+              expect(_.merge({}, group)).to.deep.equal({
+                id: 31415
+              });
+            });
+            it('returns no with __validate', function() {
+              expect(group.__validate()).to.deep.equal([]);
+            });
+          });
+        });
+
+        describe('given a group with a boolean is created with coercion', function() {
+          beforeEach(function() {
+            group = new Group({
+              id: false
+            }, {
+              coerce: true
+            });
+          });
+
+          describe('group instance', function() {
+            it('has coerced value from initializer', function() {
+              expect(_.merge({}, group)).to.deep.equal({
+                id: 0
+              });
+            });
+            it('returns no with __validate', function() {
+              expect(group.__validate()).to.deep.equal([]);
+            });
+          });
+        });
+
+      }); // Test number
+
+    });
+
   });
 
 });

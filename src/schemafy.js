@@ -44,9 +44,17 @@ function process(schema, path, source, options) {
       return value;
     case 'number':
     case 'integer':
-      value = Number(source);
+      if (sourceIsUndefined) {
+        value = schemaDefaultIsUndefined ? 0 : schemaDefault;
+      } else {
+        if (options.coerce) {
+          value = options.coerce && Number(source)
+        } else {
+          value = source;
+        }
+      }
       if (isNaN(value)) {
-        value = schemaDefault === undefined ? 0 : Number(schemaDefault);
+        value = 0;
       }
       return value;
     case 'boolean':
