@@ -14,9 +14,6 @@ describe('Schemafy', function () {
         data = undefined;
         results = undefined;
     });
-    it('is defined', function () {
-        expect(Schemafy).to.not.be.undefined;
-    });
     describe('Defining a new, anonymous schema', function () {
         describe('When called with no parameters', function () {
             beforeEach(function () {
@@ -70,6 +67,11 @@ describe('Schemafy', function () {
                             "type": "number",
                             "required": true
                         },
+                        "boolean": {
+                            "description": "Boolean property",
+                            "type": "boolean",
+                            "required": true
+                        },
                         "required": {
                             "description": "String property",
                             "type": "string",
@@ -115,7 +117,7 @@ describe('Schemafy', function () {
                             expect(data.__toJson).to.be.a('function');
                         });
                         it('returns JSON representation of data', function () {
-                            expect(data.__toJson()).to.equal('{"string":"","number":0,"required":"","objectWithoutDefinition":{}}');
+                            expect(data.__toJson()).to.equal('{"string":"","number":0,"boolean":false,"required":"","objectWithoutDefinition":{}}');
                         });
                     });
                 });
@@ -139,6 +141,7 @@ describe('Schemafy', function () {
                     data = new TestSchema({
                         "string": "stringy",
                         "number": 123,
+                        "boolean": true,
                         "notRequired": "not required",
                         "objectWithoutDefinition": {
                             "foo": "bar"
@@ -162,7 +165,7 @@ describe('Schemafy', function () {
                             expect(data.__toJson).to.be.a('function');
                         });
                         it('returns JSON representation of data', function () {
-                            expect(data.__toJson()).to.equal("{\"string\":\"stringy\",\"number\":123,\"required\":\"\",\"notRequired\":\"not required\",\"objectWithoutDefinition\":{\"foo\":\"bar\"}}");
+                            expect(data.__toJson()).to.equal('{"string":"stringy","number":123,"boolean":true,"required":"","notRequired":"not required","objectWithoutDefinition":{"foo":"bar"}}');
                         });
                     });
                 });

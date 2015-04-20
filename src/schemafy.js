@@ -11,21 +11,23 @@ function toBooleanOrUndefined(value) {
       break;
     case 'string':
       value = value.toString().match(/^\W*(false|f|no|n|0)\W*$/i) ? false : true;
-    break;
+      break;
     case 'number':
-      case 'function':
-      case 'object':
+    case 'function':
+    case 'object':
       value = Boolean(value);
-    break;
+      break;
     default:
       value = undefined;
   }
   return value;
 }
 
-function process(schema, path, source, provideUnrequired) {
+function process(schema, path, source, options) {
   var blank = {};
   var schemaDefault = schema['default'];
+  var schemaDefaultIsUndefined = typeof(schemaDefault) === 'undefined';
+  var sourceIsUndefined = typeof(source) === 'undefined';
   var value;
 
   if (!schema || typeof schema !== 'object') {
@@ -34,90 +36,55 @@ function process(schema, path, source, provideUnrequired) {
 
   switch (schema.type) {
     case 'string':
-      // Use first item of array, allows converted XML as source.
-      if (_.isArray(source) && source.length === 1) {
-      source = source[0];
-    }
-    if (typeof source === 'undefined' || source === null) {
-      if (schema.enumeration &&
-          schema.enumeration.length === 1 &&
-            schemaDefault !== schema.enumeration[0]) {
-        log.warn(
-          'Auto-correcting default for ' +
-            path +
-            ' from "' +
-            schemaDefault +
-            '" to "' +
-            schema.enumeration[0] +
-            '".');
-          value = schema.enumeration[0].toString();
-      } else if (typeof (schemaDefault) === 'undefined' || schemaDefault === null) {
-        value = '';
+      if (sourceIsUndefined) {
+        value = schemaDefaultIsUndefined ? '' : schemaDefault;
       } else {
-        value = schemaDefault.toString();
+        value = options.coerce && source.toString() || source;
       }
-    } else {
-      value = source.toString();
-    }
-    return value;
+      return value;
     case 'number':
-      case 'integer':
-      // Use first item of array, allows converted XML as source.
-      if (_.isArray(source) && source.length === 1) {
-      source = source[0];
-    }
-    value = Number(source);
-    if (isNaN(value)) {
-      value = schemaDefault === undefined ? 0 : Number(schemaDefault);
-    }
-    return value;
+    case 'integer':
+      value = Number(source);
+      if (isNaN(value)) {
+        value = schemaDefault === undefined ? 0 : Number(schemaDefault);
+      }
+      return value;
     case 'boolean':
-      // Use first item of array, allows converted XML as source.
-      if (_.isArray(source) && source.length === 1) {
-      source = source[0];
-    }
-    value = toBooleanOrUndefined(source);
-    if (value === undefined) {
-      value = toBooleanOrUndefined(schemaDefault) || false;
-    }
-    return value;
+      value = toBooleanOrUndefined(source);
+      if (value === undefined) {
+        value = toBooleanOrUndefined(schemaDefault) || false;
+      }
+      return value;
     case 'array':
-      if (!_.isArray(schemaDefault)) {
-      schemaDefault = _.toArray(schemaDefault);
-    }
-    if (_.isArray(schema.items)) {
-      throw ('Array with toupled definition is not supported for ' + path + '.');
-    }
-    if (schema.items === undefined) {
-      throw ('Array ' + path + ' requires items to be defined.');
-    }
-    value = (_.isArray(source) && source.length !== 0 && source || schemaDefault).map(function mapper(entry) {
-      return process(schema.items, path + '[].', entry);
-    });
-    return _.clone(value, true) || [];
+      if (_.isArray(schema.items)) {
+        throw ('Array with toupled definition is not supported for ' + path + '.');
+      }
+      if (schema.items === undefined) {
+        throw ('Array ' + path + ' requires items to be defined.');
+      }
+      value = (_.isArray(source) && source.length !== 0 && source || schemaDefault).map(function mapper(entry) {
+        return process(schema.items, path + '[].', entry, options);
+      });
+      return _.clone(value, true) || [];
     case 'null':
       return null;
     case 'object':
-      // Use first item of array, allows converted XML as source.
-      if (_.isArray(source) && source.length === 1) {
-      source = source[0];
-    }
-    // If no schema defined, use source or default.
-    if (schema.properties === undefined) {
-      if (source) {
-        blank = source;
-      } else {
-        blank = _.merge({}, schemaDefault) || {};
-      }
-    } else {
-      // Otherwise, use definition to process properties.
-      _(schema.properties || {}).forEach(function processProperty(value, key) {
-        if (provideUnrequired || (schema.properties[key] && schema.properties[key].required === true || false) || (source && source.hasOwnProperty(key))) {
-          blank[key] = process(schema.properties[key], path + '.' + key, source && source[key], provideUnrequired);
+      // If no schema defined, use source or default.
+      if (schema.properties === undefined) {
+        if (source) {
+          blank = source;
+        } else {
+          blank = _.merge({}, schemaDefault) || {};
         }
-      }).value();
-    }
-    return blank;
+      } else {
+        // Otherwise, use definition to process properties.
+        _(schema.properties || {}).forEach(function processProperty(value, key) {
+          if (options.createAll || (schema.properties[key] && schema.properties[key].required === true || false) || (source && source.hasOwnProperty(key))) {
+            blank[key] = process(schema.properties[key], path + '.' + key, source && source[key], options);
+          }
+        }).value();
+      }
+      return blank;
     default:
       throw ('Cannot build from type "' + schema.type + '" for ' + path + '.');
   }
@@ -156,14 +123,24 @@ function SchemaGenerator() {
   });
 
   var __Schema = {};
+
+  function instantiator(source, options) {
+    source = source || {};
+    options = options || {};
+    _.merge(this, process(definition, "root", source, options));
+  };
+
   /* jshint evil:true */
-  eval("__Schema = function " + schemaName + "(source) { if (source !== false) { _.merge(this, process(definition, 'root', source, false)); } };");
+  eval('__Schema = function ' + schemaName + '() {' +
+    '  instantiator.apply(this, Array.prototype.slice.call(arguments, 0));' +
+    '};'
+  );
 
   __Schema.schema = function schema() {
     return _.merge({}, definition);
   };
   __Schema.extend = function extend(name, extension) {
-    return SchemaGenerator(name, _.merge({}, definition, extension, overwriteArrays ));
+    return SchemaGenerator(name, _.merge({}, definition, extension, overwriteArrays));
   };
   __Schema.validate = function validate(json) {
     return validate(definition, _.assign({}, json));
@@ -195,4 +172,3 @@ SchemaGenerator.validate = validate;
 SchemaGenerator.overwriteArrays = overwriteArrays;
 
 module.exports = SchemaGenerator;
-

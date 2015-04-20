@@ -8,9 +8,9 @@ function propertiesOnly(json) {
   return _.merge({}, json);
 }
 
-describe('Schemafy', function () {
+describe('Schemafy', function() {
 
-  beforeEach(function () {
+  beforeEach(function() {
     Schemafy = undefined;
     Group = undefined;
     group = undefined;
@@ -18,16 +18,16 @@ describe('Schemafy', function () {
     Schemafy = require('../src/schemafy');
   });
 
-  it('is defined', function () {
+  it('is defined', function() {
     expect(Schemafy).to.exist;
   });
 
-  it('is a function', function () {
+  it('is a function', function() {
     expect(Schemafy).to.be.a('function');
   });
 
-  describe('when called to create a Group schema', function () {
-    beforeEach(function () {
+  describe('when called to create a Group schema', function() {
+    beforeEach(function() {
       Group = new Schemafy({
         "type": "object",
         "id": "group",
@@ -37,14 +37,15 @@ describe('Schemafy', function () {
           "id": {
             "description": "Universally unique identifier",
             "type": "string",
-            "required": true
+            "required": true,
+            "default": "12345"
           }
         }
       });
     });
 
-    describe('Group schema', function () {
-      it('has properties created with Schemafy', function () {
+    describe('Group schema', function() {
+      it('has properties created with Schemafy', function() {
         expect(Group.schema()).to.deep.equal({
           "type": "object",
           "id": "group",
@@ -54,59 +55,145 @@ describe('Schemafy', function () {
             "id": {
               "description": "Universally unique identifier",
               "type": "string",
-              "required": true
+              "required": true,
+              "default": "12345"
             }
           }
         });
       });
 
-      describe('when Group is used to instantiate a new group', function () {
-        beforeEach(function () {
+      describe('when Group is used to instantiate a new group with no options', function() {
+        beforeEach(function() {
           group = new Group();
         });
 
-        it('returns instance of Group', function () {
+        it('returns instance of Group', function() {
           expect(group).to.be.instanceof(Group);
         });
 
-        describe('group instance', function () {
-          it('has default properties from Group schema', function () {
+        describe('group instance', function() {
+          it('has required properties from Group schema', function() {
             expect(_.merge({}, group)).to.deep.equal({
-              id: ''
+              id: '12345'
             });
           });
-          it('returns errors with __validate', function () {
+          it('returns no errors with __validate', function() {
             expect(group.__validate()).to.deep.equal([]);
           });
-          it('returns string for __toJson', function () {
-            expect(group.__toJson()).to.equal("{\"id\":\"\"}");
+          it('returns string for __toJson', function() {
+            expect(group.__toJson()).to.equal("{\"id\":\"12345\"}");
           });
         });
       });
 
-      describe('when Group is used to instantiate a blank group', function () {
-        beforeEach(function () {
-          group = new Group(false);
+      describe('when Group is used to instantiate a new group with default JSON', function() {
+        beforeEach(function() {
+          group = new Group({
+            id: "31415"
+          });
         });
 
-        it('returns instance of Group', function () {
+        it('returns instance of Group', function() {
           expect(group).to.be.instanceof(Group);
         });
 
-        describe('group instance', function () {
-          it('has default properties from Group schema', function () {
-            expect(propertiesOnly(group)).to.deep.equal({});
+        describe('group instance', function() {
+          it('has required properties from Group schema', function() {
+            expect(_.merge({}, group)).to.deep.equal({
+              id: '31415'
+            });
           });
-          it('returns errors with __validate', function () {
-            expect(group.__validate()).to.deep.equal([
-              "instance.id is required"
-            ]);
+          it('returns no errors with __validate', function() {
+            expect(group.__validate()).to.deep.equal([]);
           });
-          it('returns string for __toJson', function () {
-            expect(group.__toJson()).to.equal("{}");
+          it('returns string for __toJson', function() {
+            expect(group.__toJson()).to.equal("{\"id\":\"31415\"}");
           });
         });
       });
+
+      describe('when Group is used to instantiate a new group with default JSON that has values not in schema', function() {
+        beforeEach(function() {
+          group = new Group({
+            foo: "bar"
+          });
+        });
+
+        it('returns instance of Group', function() {
+          expect(group).to.be.instanceof(Group);
+        });
+
+        describe('group instance', function() {
+          it('has properties only from Group schema', function() {
+            expect(_.merge({}, group)).to.deep.equal({
+              id: '12345'
+            });
+          });
+          it('returns no errors with __validate', function() {
+            expect(group.__validate()).to.deep.equal([]);
+          });
+          it('returns string for __toJson', function() {
+            expect(group.__toJson()).to.equal("{\"id\":\"12345\"}");
+          });
+        });
+      });
+
+      describe('when Group is created without coercion', function() {
+        beforeEach(function() {
+          group = new Group({
+            id: 31415
+          });
+        });
+
+        it('returns instance of Group', function() {
+          expect(group).to.be.instanceof(Group);
+        });
+
+        describe('group instance', function() {
+          it('has properties only from Group schema', function() {
+            expect(_.merge({}, group)).to.deep.equal({
+              id: 31415
+            });
+          });
+          it('returns no errors with __validate', function() {
+            expect(group.__validate()).to.deep.equal([
+              'instance.id is not of a type(s) string'
+            ]);
+          });
+          it('returns string for __toJson', function() {
+            expect(group.__toJson()).to.equal("{\"id\":31415}");
+          });
+        });
+      });
+
+      describe('when Group is created with coercion', function() {
+        beforeEach(function() {
+          group = new Group({
+            id: 31415
+          }, {
+            coerce: true
+          });
+        });
+
+        it('returns instance of Group', function() {
+          expect(group).to.be.instanceof(Group);
+        });
+
+        describe('group instance', function() {
+          it('has properties only from Group schema', function() {
+            expect(_.merge({}, group)).to.deep.equal({
+              id: "31415"
+            });
+          });
+          it('returns no errors with __validate', function() {
+            expect(group.__validate()).to.deep.equal([]);
+          });
+          it('returns string for __toJson', function() {
+            expect(group.__toJson()).to.equal("{\"id\":\"31415\"}");
+          });
+        });
+      });
+
     });
   });
 
