@@ -315,6 +315,300 @@ describe('Schemafy', function() {
 
       }); // Test number
 
+      describe('given a Group with a boolean', function() {
+        beforeEach(function() {
+          Group = new Schemafy({
+            "type": "object",
+            "id": "group",
+            "required": true,
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "boolean",
+                "required": true,
+                "default": false
+              }
+            }
+          });
+        });
+
+        describe('given a group created without coercion', function() {
+          beforeEach(function() {
+            group = new Group({
+              id: "31415"
+            }, {
+              coerce: false
+            });
+          });
+
+          describe('group instance', function() {
+            it('has original value from initializer', function() {
+              expect(_.merge({}, group)).to.deep.equal({
+                id: "31415",
+              });
+            });
+            it('returns number error with __validate', function() {
+              expect(group.__validate()).to.deep.equal([
+                'instance.id is not of a type(s) boolean'
+              ]);
+            });
+          });
+        });
+
+        describe('given a group with undefined is created with coercion', function() {
+          beforeEach(function() {
+            group = new Group({
+              id: undefined
+            }, {
+              coerce: true
+            });
+          });
+
+          describe('group instance', function() {
+            it('has coerced value from initializer', function() {
+              expect(_.merge({}, group)).to.deep.equal({
+                id: false
+              });
+            });
+            it('returns no with __validate', function() {
+              expect(group.__validate()).to.deep.equal([]);
+            });
+          });
+        });
+
+        describe('given a group with a negative number is created with coercion', function() {
+          beforeEach(function() {
+            group = new Group({
+              id: -1
+            }, {
+              coerce: true
+            });
+          });
+
+          describe('group instance', function() {
+            it('has coerced value from initializer', function() {
+              expect(_.merge({}, group)).to.deep.equal({
+                id: true
+              });
+            });
+            it('returns no with __validate', function() {
+              expect(group.__validate()).to.deep.equal([]);
+            });
+          });
+        });
+
+        describe('given a group with a positive number is created with coercion', function() {
+          beforeEach(function() {
+            group = new Group({
+              id: 1
+            }, {
+              coerce: true
+            });
+          });
+
+          describe('group instance', function() {
+            it('has coerced value from initializer', function() {
+              expect(_.merge({}, group)).to.deep.equal({
+                id: true
+              });
+            });
+            it('returns no with __validate', function() {
+              expect(group.__validate()).to.deep.equal([]);
+            });
+          });
+        });
+
+        describe('given a group with the number zero is created with coercion', function() {
+          beforeEach(function() {
+            group = new Group({
+              id: 0
+            }, {
+              coerce: true
+            });
+          });
+
+          describe('group instance', function() {
+            it('has coerced value from initializer', function() {
+              expect(_.merge({}, group)).to.deep.equal({
+                id: false
+              });
+            });
+            it('returns no with __validate', function() {
+              expect(group.__validate()).to.deep.equal([]);
+            });
+          });
+        });
+
+        describe('given a group with a string with something other than false words is created with coercion', function() {
+          beforeEach(function() {
+            group = new Group({
+              id: "Yes!"
+            }, {
+              coerce: true
+            });
+          });
+
+          describe('group instance', function() {
+            it('has coerced value from initializer', function() {
+              expect(_.merge({}, group)).to.deep.equal({
+                id: true
+              });
+            });
+            it('returns no with __validate', function() {
+              expect(group.__validate()).to.deep.equal([]);
+            });
+          });
+        });
+
+        describe('given a group with a string with word no is created with coercion', function() {
+          beforeEach(function() {
+            group = new Group({
+              id: "nO"
+            }, {
+              coerce: true
+            });
+          });
+
+          describe('group instance', function() {
+            it('has coerced value from initializer', function() {
+              expect(_.merge({}, group)).to.deep.equal({
+                id: false
+              });
+            });
+            it('returns no with __validate', function() {
+              expect(group.__validate()).to.deep.equal([]);
+            });
+          });
+        });
+
+        describe('given a group with a string with letter n is created with coercion', function() {
+          beforeEach(function() {
+            group = new Group({
+              id: "n"
+            }, {
+              coerce: true
+            });
+          });
+
+          describe('group instance', function() {
+            it('has coerced value from initializer', function() {
+              expect(_.merge({}, group)).to.deep.equal({
+                id: false
+              });
+            });
+            it('returns no with __validate', function() {
+              expect(group.__validate()).to.deep.equal([]);
+            });
+          });
+        });
+
+        describe('given a group with a string with letter f is created with coercion', function() {
+          beforeEach(function() {
+            group = new Group({
+              id: "F"
+            }, {
+              coerce: true
+            });
+          });
+
+          describe('group instance', function() {
+            it('has coerced value from initializer', function() {
+              expect(_.merge({}, group)).to.deep.equal({
+                id: false
+              });
+            });
+            it('returns no with __validate', function() {
+              expect(group.__validate()).to.deep.equal([]);
+            });
+          });
+        });
+
+        describe('given a group with a string with word false is created with coercion', function() {
+          beforeEach(function() {
+            group = new Group({
+              id: "fAlsE"
+            }, {
+              coerce: true
+            });
+          });
+
+          describe('group instance', function() {
+            it('has coerced value from initializer', function() {
+              expect(_.merge({}, group)).to.deep.equal({
+                id: false
+              });
+            });
+            it('returns no with __validate', function() {
+              expect(group.__validate()).to.deep.equal([]);
+            });
+          });
+        });
+
+        describe('given a group with a string with zero number is created with coercion', function() {
+          beforeEach(function() {
+            group = new Group({
+              id: "0"
+            }, {
+              coerce: true
+            });
+          });
+
+          describe('group instance', function() {
+            it('has coerced value from initializer', function() {
+              expect(_.merge({}, group)).to.deep.equal({
+                id: false
+              });
+            });
+            it('returns no with __validate', function() {
+              expect(group.__validate()).to.deep.equal([]);
+            });
+          });
+        });
+
+        describe('given a group with a string with non-zero number is created with coercion', function() {
+          beforeEach(function() {
+            group = new Group({
+              id: "31415"
+            }, {
+              coerce: true
+            });
+          });
+
+          describe('group instance', function() {
+            it('has coerced value from initializer', function() {
+              expect(_.merge({}, group)).to.deep.equal({
+                id: true
+              });
+            });
+            it('returns no with __validate', function() {
+              expect(group.__validate()).to.deep.equal([]);
+            });
+          });
+        });
+
+        describe('given a group with a boolean is created with coercion', function() {
+          beforeEach(function() {
+            group = new Group({
+              id: true
+            }, {
+              coerce: true
+            });
+          });
+
+          describe('group instance', function() {
+            it('has coerced value from initializer', function() {
+              expect(_.merge({}, group)).to.deep.equal({
+                id: true
+              });
+            });
+            it('returns no with __validate', function() {
+              expect(group.__validate()).to.deep.equal([]);
+            });
+          });
+        });
+
+      }); // Test number
+
     });
 
   });

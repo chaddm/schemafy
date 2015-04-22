@@ -5,20 +5,15 @@ var crypto = require('crypto');
 var log = require('./log');
 var JsonSchema = require('jsonschema');
 
-function toBooleanOrUndefined(value) {
+function toBoolean(value) {
   switch (typeof value) {
     case 'boolean':
       break;
     case 'string':
       value = value.toString().match(/^\W*(false|f|no|n|0)\W*$/i) ? false : true;
       break;
-    case 'number':
-    case 'function':
-    case 'object':
-      value = Boolean(value);
-      break;
     default:
-      value = undefined;
+      value = Boolean(value);
   }
   return value;
 }
@@ -58,9 +53,14 @@ function process(schema, path, source, options) {
       }
       return value;
     case 'boolean':
-      value = toBooleanOrUndefined(source);
-      if (value === undefined) {
-        value = toBooleanOrUndefined(schemaDefault) || false;
+      if (sourceIsUndefined) {
+        value = schemaDefaultIsUndefined ? false : schemaDefault;
+      } else {
+        if (options.coerce) {
+          value = options.coerce && toBoolean(source)
+        } else {
+          value = source;
+        }
       }
       return value;
     case 'array':
