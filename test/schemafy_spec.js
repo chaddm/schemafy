@@ -3,6 +3,7 @@ var expect = require('chai').expect;
 var Schemafy;
 var Group;
 var group;
+var ExtendedGroup;
 
 function propertiesOnly(json) {
   return _.merge({}, json);
@@ -14,6 +15,7 @@ describe('Schemafy', function() {
     Schemafy = undefined;
     Group = undefined;
     group = undefined;
+    ExtendedGroup = undefined;
 
     Schemafy = require('../src/schemafy');
   });
@@ -54,29 +56,109 @@ describe('Schemafy', function() {
     });
 
     describe('Group schema', function() {
-      it('has properties created with Schemafy', function() {
-        expect(Group.schema()).to.deep.equal({
-          "type": "object",
-          "id": "group",
-          "required": true,
-          "additionalProperties": false,
-          "properties": {
-            "id": {
-              "type": "string",
+
+      describe('Group schema\'s properties', function() {
+        describe('schema', function() {
+          it('is a function', function() {
+            expect(Group.schema).to.be.a('function');
+          });
+          it('returns defined schema', function() {
+            expect(Group.schema()).to.deep.equal({
+              "type": "object",
+              "id": "group",
               "required": true,
-              "default": "12345"
-            },
-            "value": {
-              "type": "number",
-              "required": true,
-              "default": 43445
-            },
-            "isTrue": {
-              "type": "boolean",
-              "required": true,
-              "default": false
-            }
-          }
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "required": true,
+                  "default": "12345"
+                },
+                "value": {
+                  "type": "number",
+                  "required": true,
+                  "default": 43445
+                },
+                "isTrue": {
+                  "type": "boolean",
+                  "required": true,
+                  "default": false
+                }
+              }
+            });
+          });
+        });
+
+        describe('extend', function() {
+          it('is a function', function() {
+            expect(Group.extend).to.be.a('function');
+          });
+          describe('when called with additional schema information', function() {
+            beforeEach(function() {
+              ExtendedGroup = Group.extend('ExtendedGroup', {
+                "type": "object",
+                "id": "extendedGroup",
+                "required": true,
+                "additionalProperties": false,
+                "properties": {
+                  "list": {
+                    "type": "array",
+                    "required": true,
+                    "items": {
+                      "type": "number",
+                      "required": true
+                    },
+                    "default": [1, 2, 3]
+                  }
+                }
+              });
+            });
+            it('returns an ExtendedGroup schema', function() {
+              expect(ExtendedGroup.name).to.equal('ExtendedGroup');
+            });
+            describe('ExtendedGroup properties', function() {
+              describe('schema', function() {
+                it('is a function', function() {
+                  expect(ExtendedGroup.schema).to.be.a('function');
+                });
+                it('returns defined schema', function() {
+                  expect(ExtendedGroup.schema()).to.deep.equal({
+                    "type": "object",
+                    "id": "extendedGroup",
+                    "required": true,
+                    "additionalProperties": false,
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "required": true,
+                        "default": "12345"
+                      },
+                      "value": {
+                        "type": "number",
+                        "required": true,
+                        "default": 43445
+                      },
+                      "isTrue": {
+                        "type": "boolean",
+                        "required": true,
+                        "default": false
+                      },
+                      "list": {
+                        "type": "array",
+                        "required": true,
+                        "items": {
+                          "type": "number",
+                          "required": true
+                        },
+                        "default": [1, 2, 3]
+                      }
+                    }
+                  });
+                });
+              });
+            });
+          });
+
         });
       });
 
@@ -632,8 +714,7 @@ describe('Schemafy', function() {
 
         describe('given a group created without a value', function() {
           beforeEach(function() {
-            group = new Group({
-            }, {
+            group = new Group({}, {
               coerce: false
             });
           });
@@ -675,8 +756,7 @@ describe('Schemafy', function() {
 
         describe('given a group created without a value', function() {
           beforeEach(function() {
-            group = new Group({
-            }, {
+            group = new Group({}, {
               coerce: false
             });
           });
@@ -684,7 +764,7 @@ describe('Schemafy', function() {
           describe('group instance', function() {
             it('has default value from initializer', function() {
               expect(_.merge({}, group)).to.deep.equal({
-                ids: [1,2,3],
+                ids: [1, 2, 3],
               });
             });
             it('returns number error with __validate', function() {
@@ -783,8 +863,7 @@ describe('Schemafy', function() {
 
         describe('given a group created without coercion', function() {
           beforeEach(function() {
-            group = new Group({
-            }, {
+            group = new Group({}, {
               coerce: false
             });
           });

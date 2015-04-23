@@ -182,19 +182,6 @@ function SchemaGenerator() {
   __Schema.prototype.__toJson = function __toJson() {
     return JSON.stringify(this);
   };
-  __Schema.prototype.__validHash = function __validHash() {
-    var toHash = _.clone(this);
-    toHash.hash = '';
-    toHash = JSON.stringify(toHash);
-    return crypto.createHash('sha1').update(toHash).digest('hex');
-  };
-  __Schema.prototype.__setHash = function __setHash() {
-    this.hash = this.__validHash();
-    return this;
-  };
-  __Schema.prototype.__hasValidHash = function __hasValidHash() {
-    return this.hash === this.__validHash();
-  };
 
   return __Schema;
 }
