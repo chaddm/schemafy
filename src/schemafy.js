@@ -64,16 +64,30 @@ function process(schema, path, source, options) {
       }
       return value;
     case 'array':
+      // TODO - Add support for JSON Schema tupals
       if (_.isArray(schema.items)) {
         throw ('Array with toupled definition is not supported for ' + path + '.');
       }
+      // TODO - Maybe there is a better way to handle arrays without defined items.
       if (schema.items === undefined) {
         throw ('Array ' + path + ' requires items to be defined.');
       }
-      value = (_.isArray(source) && source.length !== 0 && source || schemaDefault).map(function mapper(entry) {
-        return process(schema.items, path + '[].', entry, options);
-      });
-      return _.clone(value, true) || [];
+      if (sourceIsUndefined) {
+        value = schemaDefaultIsUndefined ? [] : schemaDefault;
+      } else {
+        if (options.coerce) {
+          value = options.coerce && _.toArray(source)
+        } else {
+          value = source;
+        }
+      }
+      if(_.isArray(value)) {
+        value = value.map(function mapper(entry) {
+          return process(schema.items, path + '[].', entry, options);
+        });
+        return _.clone(value, true);
+      }
+      return value;
     case 'null':
       return null;
     case 'object':
