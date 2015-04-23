@@ -89,7 +89,16 @@ function process(schema, path, source, options) {
       }
       return value;
     case 'null':
-      return null;
+      if (sourceIsUndefined) {
+        value = schemaDefaultIsUndefined ? null : schemaDefault;
+      } else {
+        if (options.coerce) {
+          value = null;
+        } else {
+          value = source;
+        }
+      }
+      return value;
     case 'object':
       // If no schema defined, use source or default.
       if (schema.properties === undefined) {
