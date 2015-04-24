@@ -4,6 +4,7 @@ var Schemafy;
 var Group;
 var group;
 var ExtendedGroup;
+var errors;
 
 function propertiesOnly(json) {
   return _.merge({}, json);
@@ -16,6 +17,7 @@ describe('Schemafy', function() {
     Group = undefined;
     group = undefined;
     ExtendedGroup = undefined;
+    errors = undefined;
 
     Schemafy = require('../src/schemafy');
   });
@@ -158,8 +160,43 @@ describe('Schemafy', function() {
               });
             });
           });
+        }); // Schema.extend
 
-        });
+        describe('validate', function() {
+          it('is a function', function() {
+            expect(Group.validate).to.be.a('function');
+          });
+
+          describe('when called with a valid JSON', function() {
+            beforeEach(function() {
+              errors = Group.validate({
+                id: "foo",
+                value: 123,
+                isTrue: true
+              })
+            });
+            it('returns no errors', function() {
+              expect(errors).to.deep.equal([]);
+            });
+          });
+
+          describe('when called with a invalid JSON', function() {
+            beforeEach(function() {
+              errors = Group.validate({
+                value: "123",
+                isTrue: null
+              });
+            });
+            it('returns no errors', function() {
+              expect(errors).to.deep.equal([
+                "instance.id is required",
+                "instance.value is not of a type(s) number",
+                "instance.isTrue is not of a type(s) boolean"
+              ]);
+            });
+          });
+        }); // Schema.validate
+
       });
 
       describe('when Group is used to instantiate a new group with no options', function() {

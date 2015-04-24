@@ -81,7 +81,7 @@ function process(schema, path, source, options) {
           value = source;
         }
       }
-      if(_.isArray(value)) {
+      if (_.isArray(value)) {
         value = value.map(function mapper(entry) {
           return process(schema.items, path + '[].', entry, options);
         });
@@ -173,7 +173,7 @@ function SchemaGenerator() {
   __Schema.extend = function extend(name, extension) {
     return SchemaGenerator(name, _.merge({}, definition, extension, overwriteArrays));
   };
-  __Schema.validate = function validate(json) {
+  __Schema.validate = function validate_(json) {
     return validate(definition, _.assign({}, json));
   };
   __Schema.prototype.__validate = function __validate() {
