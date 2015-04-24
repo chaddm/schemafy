@@ -1,9 +1,21 @@
-(function(global) {
-
+(function(global, _, JsonSchema) {
   'use strict';
 
-  var _ = require('lodash');
-  var JsonSchema = require('jsonschema');
+  if (typeof module === 'object' && module && typeof module.exports === 'object') {
+    // NodeJs loader
+    // Load LoDash and JsonSchema, unless already globally defined.
+    _ = _ || require('lodash');
+    JsonSchema = JsonSchema || require('jsonschema');
+
+    module.exports = SchemaGenerator;
+  } else if (typeof define === 'function' && define.amd) {
+    // AMD loader
+    define("schemafy", ['lodash', 'jsonschema'], function(_) {
+      return SchemaGenerator;
+    });
+  } else {
+    throw new Error('Schemafy requires a module loader (RequireJs, Browserify, etc) to work in the browser.');
+  }
 
   function toBoolean(value) {
     switch (typeof value) {
@@ -192,14 +204,8 @@
   SchemaGenerator.validate = validate;
   SchemaGenerator.overwriteArrays = overwriteArrays;
 
-  if (typeof module === 'object' && module && typeof module.exports === 'object') {
-    module.exports = SchemaGenerator;
-  } else if (typeof define === 'function' && define.amd) {
-    define("schemafy", [], function(_) {
-      return SchemaGenerator;
-    });
-  } else {
-    global.SchemaGenerator = SchemaGenerator;
-  }
-
-})(this);
+})(
+  this,
+  typeof _ === 'undefined' ? undefined : _,
+  typeof JsonSchema === 'undefined' ? undefined : JsonSchema
+);
