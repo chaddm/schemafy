@@ -1,8 +1,6 @@
 'use strict';
 
 var _ = require('lodash');
-var crypto = require('crypto');
-var log = require('./log');
 var JsonSchema = require('jsonschema');
 
 function toBoolean(value) {
@@ -158,6 +156,9 @@ function SchemaGenerator() {
   function instantiator(source, options) {
     source = source || {};
     options = options || {};
+    if (options.coerce === undefined) {
+      options.coerce = true;
+    }
     _.merge(this, process(definition, "root", source, options));
   }
 

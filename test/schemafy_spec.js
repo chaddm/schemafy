@@ -304,6 +304,26 @@ describe('Schemafy', function() {
           });
         });
 
+        describe('given a group created without options', function() {
+          beforeEach(function() {
+            group = new Group({
+              id: 31415
+            }, {
+            });
+          });
+
+          describe('group instance', function() {
+            it('has coerced value from initializer', function() {
+              expect(_.merge({}, group)).to.deep.equal({
+                id: "31415",
+              });
+            });
+            it('returns string error with __validate', function() {
+              expect(group.__validate()).to.deep.equal([]);
+            });
+          });
+        });
+
         describe('given a group created without coercion', function() {
           beforeEach(function() {
             group = new Group({
