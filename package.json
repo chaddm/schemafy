@@ -2,7 +2,7 @@
   "name": "schemafy",
   "version": "0.5.0",
   "description": "JSON schema generation and validation.",
-  "main": "src/index.js",
+  "main": "src/schemafy.js",
   "directories": {
     "test": "test"
   },
@@ -36,12 +36,10 @@
     "validations"
   ],
   "author": "Chad Dumler-Montplaisir <chad.dumler.montplaisir@gmail.com>",
-  "contributors": [
-    {
-      "name": "Eric Biven",
-      "email": "eric@biven.us"
-    }
-  ],
+  "contributors": [{
+    "name": "Eric Biven",
+    "email": "eric@biven.us"
+  }],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/chaddm/schemafy/issues"
