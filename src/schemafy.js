@@ -43,7 +43,7 @@ function process(schema, path, source, options) {
         value = schemaDefaultIsUndefined ? 0 : schemaDefault;
       } else {
         if (options.coerce) {
-          value = options.coerce && Number(source)
+          value = options.coerce && Number(source);
         } else {
           value = source;
         }
@@ -57,7 +57,7 @@ function process(schema, path, source, options) {
         value = schemaDefaultIsUndefined ? false : schemaDefault;
       } else {
         if (options.coerce) {
-          value = options.coerce && toBoolean(source)
+          value = options.coerce && toBoolean(source);
         } else {
           value = source;
         }
@@ -76,7 +76,7 @@ function process(schema, path, source, options) {
         value = schemaDefaultIsUndefined ? [] : schemaDefault;
       } else {
         if (options.coerce) {
-          value = options.coerce && _.toArray(source)
+          value = options.coerce && _.toArray(source);
         } else {
           value = source;
         }
@@ -159,7 +159,7 @@ function SchemaGenerator() {
     source = source || {};
     options = options || {};
     _.merge(this, process(definition, "root", source, options));
-  };
+  }
 
   /* jshint evil:true */
   eval('__Schema = function ' + schemaName + '() {' +
