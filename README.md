@@ -22,7 +22,7 @@ changed, the database restructures everything, which takes time and risks data c
 ----------
 
 
-###Installation
+### Installation
 
 Include Schemafy in your project:
 
@@ -37,7 +37,7 @@ Schemafy defines "schemafy" and the dependencies for "lodash" and "jsonschema" m
 
 ----------
 
-###Usage
+### Usage
 
 #### Create a Person schema:
 ```javascript
