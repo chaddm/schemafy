@@ -1,6 +1,6 @@
 {
   "name": "schemafy",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "JSON schema generation and validation.",
   "main": "src/schemafy.js",
   "directories": {
