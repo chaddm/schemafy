@@ -157,13 +157,17 @@
       schemaName = args[0];
       args.shift();
     }
-    var definition = _.reduce(args, function mergeDefinitionExtensionAndArrays(extention, definition) {
-      return _.merge(definition, extention, overwriteArrays);
+    var definition = _.reduce(args, function mergeDefinitionExtensionAndArrays(definition, extension) {
+      return _.merge(definition, extension, overwriteArrays);
     }, {
       "type": "object",
       "additionalProperties": false,
       "properties": {}
     });
+
+    if(!definition.type.toString().match(/^object$/i)) {
+      throw new Error('Root type must be an object');
+    }
 
     var __Schema = {};
 

@@ -5,6 +5,7 @@ var Group;
 var group;
 var ExtendedGroup;
 var errors;
+var lambda;
 
 function propertiesOnly(json) {
   return _.merge({}, json);
@@ -18,6 +19,7 @@ describe('Schemafy', function() {
     group = undefined;
     ExtendedGroup = undefined;
     errors = undefined;
+    lambda = undefined;
 
     Schemafy = require('../src/schemafy');
   });
@@ -28,6 +30,21 @@ describe('Schemafy', function() {
 
   it('is a function', function() {
     expect(Schemafy).to.be.a('function');
+  });
+
+  describe('when called to create a non-object schema', function(){
+    beforeEach(function(){
+      lambda = function() {
+        new Schemafy({
+          "type": "number",
+          "required": true
+        });
+      }
+    });
+
+    it('throws an error', function(){
+      expect(lambda).to.throw('Root type must be an object');
+    });
   });
 
   describe('when called to create a Group schema', function() {
