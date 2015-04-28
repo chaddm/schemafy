@@ -39,7 +39,7 @@ describe('Schemafy', function() {
           "type": "number",
           "required": true
         });
-      }
+      };
     });
 
     it('throws an error', function(){
@@ -227,7 +227,7 @@ describe('Schemafy', function() {
 
         describe('group instance', function() {
           it('has required properties from Group schema', function() {
-            expect(_.merge({}, group)).to.deep.equal({
+            expect(propertiesOnly(group)).to.deep.equal({
               id: '12345',
               value: 43445,
               isTrue: false
@@ -255,7 +255,7 @@ describe('Schemafy', function() {
 
         describe('group instance', function() {
           it('has required properties from Group schema', function() {
-            expect(_.merge({}, group)).to.deep.equal({
+            expect(propertiesOnly(group)).to.deep.equal({
               id: '31415',
               value: 43445,
               isTrue: false
@@ -283,7 +283,7 @@ describe('Schemafy', function() {
 
         describe('group instance', function() {
           it('has properties only from Group schema', function() {
-            expect(_.merge({}, group)).to.deep.equal({
+            expect(propertiesOnly(group)).to.deep.equal({
               id: '12345',
               value: 43445,
               isTrue: false
@@ -331,7 +331,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has coerced value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: "31415",
               });
             });
@@ -352,7 +352,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has original value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: 31415,
               });
             });
@@ -375,7 +375,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has coerced value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: "31415"
               });
             });
@@ -415,7 +415,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has original value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: "31415",
               });
             });
@@ -438,7 +438,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has coerced value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: 31415
               });
             });
@@ -459,7 +459,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has coerced value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: 0
               });
             });
@@ -499,7 +499,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has original value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: "31415",
               });
             });
@@ -522,7 +522,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has coerced value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: false
               });
             });
@@ -543,7 +543,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has coerced value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: true
               });
             });
@@ -564,7 +564,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has coerced value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: true
               });
             });
@@ -585,7 +585,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has coerced value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: false
               });
             });
@@ -606,7 +606,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has coerced value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: true
               });
             });
@@ -627,7 +627,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has coerced value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: false
               });
             });
@@ -648,7 +648,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has coerced value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: false
               });
             });
@@ -669,7 +669,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has coerced value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: false
               });
             });
@@ -690,7 +690,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has coerced value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: false
               });
             });
@@ -711,7 +711,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has coerced value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: false
               });
             });
@@ -732,7 +732,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has coerced value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: true
               });
             });
@@ -753,7 +753,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has coerced value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: true
               });
             });
@@ -795,7 +795,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has empty array from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 ids: [],
               });
             });
@@ -837,7 +837,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has default value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 ids: [1, 2, 3],
               });
             });
@@ -858,7 +858,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has original value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 ids: "31415",
               });
             });
@@ -881,7 +881,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has coerced value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 ids: [4, 5]
               });
             });
@@ -906,7 +906,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has coerced value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 ids: [7, 9, 11]
               });
             });
@@ -944,7 +944,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has original value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: 'Woot!',
               });
             });
@@ -984,7 +984,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has original value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: "31415",
               });
             });
@@ -1007,7 +1007,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has coerced value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: null
               });
             });
@@ -1028,7 +1028,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has coerced value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: null
               });
             });
@@ -1049,7 +1049,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has coerced value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: null
               });
             });
@@ -1070,7 +1070,7 @@ describe('Schemafy', function() {
 
           describe('group instance', function() {
             it('has coerced value from initializer', function() {
-              expect(_.merge({}, group)).to.deep.equal({
+              expect(propertiesOnly(group)).to.deep.equal({
                 id: null
               });
             });
