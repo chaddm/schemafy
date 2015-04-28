@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Schemafy : ">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Schemafy</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/chaddm/schemafy">View on GitHub</a>
+
+          <h1 id="project_title">Schemafy</h1>
+          <h2 id="project_tagline"></h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/chaddm/schemafy/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/chaddm/schemafy/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2>
+<a id="v05" class="anchor" href="#v05" aria-hidden="true"><span class="octicon octicon-link"></span></a>v0.5</h2>
+
+<p><em>TL;DR: Schemafy is a library for creating schemas, creating POJOs (Plain Old JavaScript Objects) from schemas, and validating POJOs against schemas.</em></p>
+
+<hr>
+
+<h2>
+<a id="why-schemafy" class="anchor" href="#why-schemafy" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>Why Schemafy?</em>
+</h2>
+
+<p>Schemafy was built to solve a problem: we wanted to be able to save document data, but not worry about trying to keep the structure up-to-date.  Normally, schemas are used to enforced structure in a database.  When a schema is changed, the database restructures everything, which takes time and risks data corruption.  We figured: If we never read the data again, why bother updating it?  Schemafy let us to load data and on-the-fly have it conform to a schema.</p>
+
+<h2>
+<a id="what-can-you-do" class="anchor" href="#what-can-you-do" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>What can you do?</em>
+</h2>
+
+<ul>
+<li>Define schemas with the JSON Schema standard with syntatic constraints, like type, range, and default value.</li>
+<li>Create blank POJOs from a schema, where required properties are created automatically with default values.</li>
+<li>Create POJOs from JSON data, where undefined properties are dropped and non-conforming data is coerced.</li>
+</ul>
+
+<hr>
+
+<h3>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h3>
+
+<p>Include Schemafy in your project:</p>
+
+<div class="highlight highlight-sh"><pre>$ npm install schemafy --save</pre></div>
+
+<h4>
+<a id="nodejs-and-in-the-browser-with-browserify" class="anchor" href="#nodejs-and-in-the-browser-with-browserify" aria-hidden="true"><span class="octicon octicon-link"></span></a>NodeJs and in the browser with browserify</h4>
+
+<p>Use <code>require("schemafy")</code>.</p>
+
+<h4>
+<a id="in-the-browser-with-amd" class="anchor" href="#in-the-browser-with-amd" aria-hidden="true"><span class="octicon octicon-link"></span></a>In the browser with AMD</h4>
+
+<p>Schemafy defines "schemafy," and dependencies "lodash" and "jsonschema" must be defined.</p>
+
+<hr>
+
+<h3>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h3>
+
+<h4>
+<a id="create-a-person-schema" class="anchor" href="#create-a-person-schema" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create a Person schema:</h4>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-k">var</span> Schemafy <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>schemafy<span class="pl-pds">'</span></span>)
+
+<span class="pl-k">var</span> Person <span class="pl-k">=</span> Schemafy(<span class="pl-s"><span class="pl-pds">"</span>Person<span class="pl-pds">"</span></span>, {
+    type<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>object<span class="pl-pds">"</span></span>,
+    additionalProperties<span class="pl-k">:</span> <span class="pl-c1">false</span>,
+    properties<span class="pl-k">:</span> {
+      id<span class="pl-k">:</span> {
+        type<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>number<span class="pl-pds">"</span></span>,
+        required<span class="pl-k">:</span> <span class="pl-c1">true</span>,
+        min<span class="pl-k">:</span> <span class="pl-c1">0</span>
+      },
+      username<span class="pl-k">:</span> {
+        type<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>string<span class="pl-pds">"</span></span>,
+        required<span class="pl-k">:</span> <span class="pl-c1">true</span>,
+        minLength<span class="pl-k">:</span> <span class="pl-c1">1</span>,
+      }
+    }
+  });</pre></div>
+
+<h4>
+<a id="create-a-blank-pojo-of-person" class="anchor" href="#create-a-blank-pojo-of-person" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create a blank POJO of Person:</h4>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-k">var</span> person <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Person</span>();
+  <span class="pl-c">// =&gt; { id: 0, username: "" }</span>
+<span class="pl-k">var</span> isPerson <span class="pl-k">=</span> person <span class="pl-k">instanceof</span> Person
+  <span class="pl-c">// =&gt; true</span></pre></div>
+
+<h4>
+<a id="create-a-pojo-from-a-source-with-coercion" class="anchor" href="#create-a-pojo-from-a-source-with-coercion" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create a POJO from a source, with coercion:</h4>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-k">var</span> person <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Person</span>({
+    id<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>123<span class="pl-pds">"</span></span>,
+    username<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>woot<span class="pl-pds">"</span></span>
+  });
+  <span class="pl-c">// =&gt; { id: 123, username: "woot" }</span></pre></div>
+
+<h4>
+<a id="create-a-pojo-from-a-source-without-coercion-and-validate" class="anchor" href="#create-a-pojo-from-a-source-without-coercion-and-validate" aria-hidden="true"><span class="octicon octicon-link"></span></a>Create a POJO from a source, without coercion, and validate:</h4>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-k">var</span> person <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Person</span>({
+    id<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>123<span class="pl-pds">"</span></span>,
+    username<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>woot<span class="pl-pds">"</span></span>
+  }, {
+    coerce<span class="pl-k">:</span> <span class="pl-c1">false</span>
+  });
+  <span class="pl-c">// =&gt; { id: "123", username: "woot" }</span>
+person.__validate()
+  <span class="pl-c">// =&gt; [ "instance.id is not of type(s) number" ]</span></pre></div>
+
+<hr>
+
+<h2>
+<a id="contribution-issues" class="anchor" href="#contribution-issues" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contribution, Issues</h2>
+
+<p>Please join us on GitHub at <a href="https://github.com/chaddm/schemafy">chaddm/schemafy</a>.</p>
+
+<hr>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>MIT -  <em>Join the abode, share some code.</em></p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Schemafy maintained by <a href="https://github.com/chaddm">chaddm</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
