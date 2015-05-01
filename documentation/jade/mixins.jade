@@ -1,0 +1,148 @@
+//- KO binding helper (avoids escaping parameters like "&" passed in to the binding handler)
+mixin ko(bind)
+    | <!-- ko !{bind} -->
+    if block
+        block
+    | <!-- /ko -->
+
+//- KO binding helper (follows jade default behavior of escaping characters like quotes and "&")
+mixin ko-escaped(bind)
+    | <!-- ko #{bind} -->
+    if block
+        block
+    | <!-- /ko -->
+
+//- Common helpers
+mixin a(href)
+    a(data-bind="attr: {href: #{href}}")&attributes(attributes)
+        if block
+            block
+
+mixin fa(icon)
+    i.fa(class="fa-#{icon}")&attributes(attributes)
+
+mixin thead-tr(bind)
+    thead(data-bind=bind ? "#{bind}" : undefined)&attributes(attributes)
+        tr
+            if block
+                block
+
+mixin tbody-tr(bind)
+    tbody(data-bind=bind ? "#{bind}" : undefined)&attributes(attributes)
+        tr
+            if block
+                block
+
+//- all 4 sizes are passed into the mixin in case a different ratio size is provided for the various sizes
+mixin col(xs, sm, md, lg)
+    - items = []
+    - (xs > 1 && xs <= 12) ? items.push("col-xs-" + xs) : undefined
+    - (sm > 1 && sm <= 12) ? items.push("col-sm-" + sm) : undefined
+    - (md > 1 && md <= 12) ? items.push("col-md-" + md) : undefined
+    - (lg > 1 && lg <= 12) ? items.push("col-lg-" + lg) : undefined
+    - (!items.length) ? items.push("col-xs-12") : undefined
+    div(class=items.join(' '))&attributes(attributes)
+        if block
+            block
+
+mixin checkbox-group
+    .checkbox-group&attributes(attributes)
+        if block
+            block
+        .clearfix
+
+mixin appdemo-navigation-links
+    li(data-bind="css: {active: app.routing.currentView() === 'LandingPage' }")
+        +a('"#"') #[i.fa.fa-truck] Landing
+    li(data-bind="css: {active: app.routing.currentView() === 'FormPage' }")
+        +a('"#form"') #[i.fa.fa-forward] Form
+
+//- Common page navigation bar
+mixin navbar-tabs
+    nav.navbar.navbar-default.navbar-fixed-top.navbar-tabs(role='navigation')&attributes(attributes)
+        .container-fluid
+            .navbar-header
+                button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#collapsible-nav')
+                    span.sr-only Toggle navigation
+                    span.icon-bar
+                    span.icon-bar
+                    span.icon-bar
+                a.navbar-brand Dirty Demo
+            #collapsible-nav.collapse.navbar-collapse
+                ul.nav.nav-tabs.hidden-xs
+                    +appdemo-navigation-links
+                ul.nav.navbar-nav.visible-xs
+                    +appdemo-navigation-links
+
+//- Common page navigation bar
+mixin navbar
+    nav.navbar.navbar-default.navbar-fixed-top(role='navigation')&attributes(attributes)
+        .container-fluid
+            .navbar-header
+                button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#collapsible-nav')
+                    span.sr-only Toggle navigation
+                    span.icon-bar
+                    span.icon-bar
+                    span.icon-bar
+                a.navbar-brand Yoyodyne, INC.
+            #collapsible-nav.collapse.navbar-collapse
+                ul.nav.navbar-nav
+                    +appdemo-navigation-links
+
+//- Navbar items, float left
+mixin navbar-ul
+    ul.nav.navbar-nav&attributes(attributes)
+        if block
+            block
+
+//- Page loading graphic
+mixin page-loading
+    +ko('if:loading')
+        #loader
+            #load-container
+                img(src='resources/load.gif')
+
+mixin panel(xs, sm, md, lg)
+    +col(xs, sm, md, lg)&attributes(attributes)
+        .panel
+            if block
+                block
+
+//  singular .row with .col-xs-12
+mixin rowCol
+    .row&attributes(attributes)
+        +col(undefined)
+            if block
+                block
+
+mixin modal(id)
+    div.modal.fade(
+        id='#{id}',
+        tabindex='-1',
+        role='dialog',
+        aria-labelledby='#{id}',
+        aria-hidden='true'
+    )&attributes(attributes)
+        .modal-dialog
+            .modal-content
+                if block
+                    block
+
+mixin fixed-header-table-container(bind)
+    .fixed-header-table-container(data-bind=bind ? "#{bind}" : undefined)&attributes(attributes)
+        div
+            if block
+                block
+
+mixin fixed-footer-table-container(bind)
+    .fixed-footer-table-container(data-bind=bind ? "#{bind}" : undefined)&attributes(attributes)
+        div
+            if block
+                block
+
+mixin fixed-header-footer-table-container(bind)
+    .fixed-header-table-container.fixed-footer-table-container(data-bind=bind ? "#{bind}" : undefined)&attributes(attributes)
+        div
+            if block
+                block
+

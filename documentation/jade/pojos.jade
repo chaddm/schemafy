@@ -1,0 +1,50 @@
+a(name='pojos')
+.container
+  .panel.panel-default
+    .panel-heading
+      h2.panel-title Plain Old JavaScript Objects
+    .panel-body
+      p Schemas are used to create new POJOs:
+      pre
+        code.language-javascript
+          | var user = new User(); // => {}
+      p The objects belong to their schema:
+      pre
+        code.language-javascript
+          | user instanceof User // => true
+      p The objects can be modified like any other object:
+      pre
+        code.language-javascript
+          | user.username = "Teddy";
+          | user.isAdmin  = true;
+      p New objects can be loaded from a source and validated:
+      pre
+        code.language-javascript
+          | var user = new User(badDataFromDb, { coerce: false });
+          | // => { username: 123, isAdmin: "" }
+          | user.__validate();
+          | // => [ 'instance.username is not of a type(s) string',
+          | //      'instance.isAdmin is not of a type(s) boolean' ]
+      p New POJOs can be created with all fields pre-initialized:
+      pre
+        code.language-javascript
+          | var user = new User({}, { createAll: true });
+          | // => { username: "", isAdmin: false }
+      hr
+      h4 new Schema(source, options)
+      p source (object) - Optional initialization source POJO
+      p options (object) - Optional hash of options
+      p options.coerce    (boolean, default true) - Attempt to coerce any properties that do not match type into required type.
+      p options.createAll (boolean) - All properties are created from defaults if not initialized from a source.
+      p Returns a new instance of type Schema.
+      hr
+      h4 POJOs have the following class properties:
+      a(name='pojos-tojson')
+      hr
+      h4 pojo.__toJson()
+      p Returns the POJO's properties as a JSON string.
+      a(name='pojos-validate')
+      hr
+      h4 pojo.__validate()
+      p Returns an array of errors, if any, how the target fails validation with the schema.
+

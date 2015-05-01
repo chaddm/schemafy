@@ -1,0 +1,57 @@
+a(name='schemas')
+.container
+  .panel.panel-default
+    .panel-heading
+      h2.panel-title Schemas
+    .panel-body
+      p Schemas are defined with Schemafy, which returns an object constructor function:
+      pre
+        code.language-javascript
+          | var userSchema = {
+          |   type: "object",
+          |   additionalProperties: false,
+          |   properties: {
+          |     username: {
+          |       type: "string"
+          |     },
+          |     isAdmin: {
+          |       type: "boolean"
+          |     }
+          |   }
+          | };
+          | var User = Schemafy(userSchema);
+      p Schemas are implemented using 
+        a(href='https://github.com/tdegrunt/jsonschema', target="_blank") JSON Schema v4
+        |.  It can define many complex structures and requirements. Schemafy has 
+        | two signficiant restrictions when defining schemas:
+      ul
+        li
+          p The root schema type must be "object," otherwise Schemafy can't build an object.
+        li
+          p Schemafy does not support JSON Schema's tupled defintions for arrays.
+      hr
+      h4 Schemafy(name, schema)
+      p name (string) - New schema's name
+      p schema (object) - JSON Schema schema
+      p Returns a new schema constructor based on the schema.
+      hr
+      h4 Schemas have the following class properties:
+      a(name='schemas-extend')
+      hr
+      h4 Schema.extend(name, newSchema)
+      p name (string) - New schema's name
+      p newSchema (object) - JSON Schema schema
+      p Returns a new schema constructor based on the original schema and the properties 
+        | of the new schema.  The new schema is merged into the original schema's
+        | definition; therefore, it can be partially defined; however, any array structures are
+        | replaced by the new defintion, not merged.
+      a(name='schemas-schema')
+      hr
+      h4 Schema.schema()
+      p Returns the JSON Schema definition for the schema.
+      a(name='schemas-validate')
+      hr
+      h4 Schema.validate(target)
+      p target (object) - POJO to validate
+      p Returns an array of errors, if any, how the target fails validation with the schema.
+

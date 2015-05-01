@@ -7,18 +7,31 @@
     "test": "test"
   },
   "dependencies": {
-    "jsonschema": "^1.0.1",
-    "lodash": "^3.6.0"
+    "jsonschema": "=1.0.1",
+    "lodash": "=3.7.0"
   },
   "devDependencies": {
-    "chai": "^2.2.0",
+    "bootstrap": "^3.3.4",
+    "browser-sync": "^2.6.9",
+    "browserify": "^10.0.0",
+    "chai": "=2.2.0",
     "del": "^1.1.1",
-    "gulp": "^3.8.11",
-    "gulp-istanbul": "^0.8.1",
-    "gulp-jshint": "^1.10.0",
-    "gulp-mocha": "^2.0.1",
-    "minimist": "^1.1.1",
-    "mocha": "^2.2.4"
+    "glob": "^5.0.5",
+    "gulp": "=3.8.11",
+    "gulp-istanbul": "=0.8.1",
+    "gulp-jade": "^1.0.0",
+    "gulp-jshint": "=1.10.0",
+    "gulp-less": "=3.0.3",
+    "gulp-mocha": "=2.0.1",
+    "gulp-notify": "^2.2.0",
+    "gulp-sourcemaps": "^1.5.2",
+    "minimist": "=1.1.1",
+    "mocha": "=2.2.4",
+    "notify-send": "^0.1.2",
+    "pretty-hrtime": "^1.0.0",
+    "run-sequence": "^1.1.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.2.1"
   },
   "scripts": {
     "test": "gulp test"
