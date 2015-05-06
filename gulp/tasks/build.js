@@ -4,5 +4,6 @@ gulp.task('build', [
   'browserify',
   'jade',
   'less',
-  'copy'
+  'copy',
+  'compress'
 ]);
