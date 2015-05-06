@@ -19,7 +19,6 @@ Schemafy was built to solve a problem: we wanted to be able to save document dat
 
 ----------
 
-
 ### Installation
 
 Include Schemafy in your project:
@@ -36,6 +35,8 @@ Schemafy defines "schemafy," and dependencies "lodash" and "jsonschema" must be 
 ----------
 
 ### Usage
+
+Full documentation is available at [chaddm.github.io/schemafy](https://chaddm.github.io/schemafy).
 
 #### Create a Person schema:
 ```javascript
