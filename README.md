@@ -8,7 +8,7 @@ v0.5
 *Why Schemafy?*
 --
 
-Schemafy was built to solve a problem: we wanted to be able to save document data, but not worry about trying to keep the structure up-to-date.  Normally, schemas are used to enforced structure in a database.  When a schema is changed, the database restructures everything, which takes time and risks data corruption.  We figured: If we never read the data again, why bother updating it?  Schemafy let us to load data and on-the-fly have it conform to a schema.
+Schemafy was built to solve a problem: we wanted to be able to save document data, but not worry about trying to keep the structure up-to-date.  Normally, schemas are used to enforced structure in a database.  When a schema is changed, the database restructures everything, which takes time and risks data corruption.  We figured: If we never read the data again, why bother updating it?  Schemafy let us load data and on-the-fly have it conform to a schema.
 
 *What can you do?*
 --
