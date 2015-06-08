@@ -54,7 +54,7 @@ var Person = Schemafy("Person", {
       username: {
         type: "string",
         required: true,
-        minLength: 1,
+        minLength: 1
       }
     }
   });
